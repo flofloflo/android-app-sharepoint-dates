@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SPProject/SPProject.iml" filepath="$PROJECT_DIR$/SPProject/SPProject.iml" />
       <module fileurl="file://$PROJECT_DIR$/SPProjectProject.iml" filepath="$PROJECT_DIR$/SPProjectProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android-app-sharepoint-dates.iml" filepath="$PROJECT_DIR$/android-app-sharepoint-dates.iml" />
     </modules>
   </component>
 </project>

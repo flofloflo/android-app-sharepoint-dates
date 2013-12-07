@@ -3,6 +3,5 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProjectOverview"
-    tools:ignore="MergeRootFrame"
-    android:clickable="false" />
+    tools:context="com.bpf.sharepoint.project.dates.AddProject"
+    tools:ignore="MergeRootFrame" />

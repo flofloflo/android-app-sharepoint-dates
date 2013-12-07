@@ -22,6 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".AddProject"
+            android:label="@string/add_project"
+            android:parentActivityName="com.bpf.sharepoint.project.dates.ProjectOverview" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bpf.sharepoint.project.dates.ProjectOverview" />
+        </activity>
     </application>
 
 </manifest>

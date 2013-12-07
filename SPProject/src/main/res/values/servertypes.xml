@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="servertypes">
+        <item>SharePoint Online</item>
+        <item>SharePoint 2013</item>
+    </string-array>
+</resources>

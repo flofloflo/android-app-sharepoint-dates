@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">SPProject</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-
+    <string name="action_settings">Einstellungen</string>
+    <string name="app_name">SP Projekttermine</string>
+    <string name="project_overview">Projektübersicht</string>
+    <string name="add_project">Projekt hinzufügen</string>
+    <string name="welcome">Herzlich Willkommen! Fügen Sie ein Projekt hinzu (Button +) um mit der Benutzung zu starten.</string>
+    <string name="cal_address">Kalender - URL</string>
+    <string name="username">Benutzername</string>
+    <string name="password">Passwort</string>
+    <string name="test">Test</string>
+    <string name="save">Speichern</string>
 </resources>
