@@ -42,10 +42,12 @@ public class ProjectOverview extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.action_add_project:
-                Intent intent=new Intent(this,AddProject.class);
-                startActivity(intent);
+                Intent addProj=new Intent(this,AddProject.class);
+                startActivity(addProj);
                 return true;
             case R.id.action_settings:
+                Intent settingsAct=new Intent(this,SettingsActivity.class);
+                startActivity(settingsAct);
                 return true;
         }
         return super.onOptionsItemSelected(item);
