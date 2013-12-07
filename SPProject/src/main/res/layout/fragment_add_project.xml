@@ -16,51 +16,16 @@
     android:hint="@string/cal_address"
         android:inputType="textNoSuggestions|textUri" />
 
-    <EditText
-        android:id="@+id/edit_user"
+    <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/username"
-        android:inputType="textNoSuggestions|textEmailAddress" />
+        android:text="@string/Login"
+        android:id="@+id/btn_login"
+        android:onClick="doLogin" />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="textNoSuggestions|textPassword"
-        android:ems="10"
-        android:id="@+id/edit_password"
-        android:hint="@string/password" />
-
-    <LinearLayout
-        android:orientation="vertical"
+    <WebView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="1">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/test"
-                android:id="@+id/button"
-                android:layout_weight="0.50" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/save"
-                android:id="@+id/button2"
-                android:layout_weight="0.50" />
-        </LinearLayout>
-
-        <WebView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:id="@+id/webView" />
-    </LinearLayout>
+        android:layout_height="fill_parent"
+        android:id="@+id/webView" />
 
 </LinearLayout>

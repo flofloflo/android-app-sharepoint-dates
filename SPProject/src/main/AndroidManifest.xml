@@ -3,11 +3,10 @@
     package="com.bpf.sharepoint.project.dates"
     android:versionCode="1"
     android:versionName="1.0" >
-
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
-
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -30,14 +29,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.bpf.sharepoint.project.dates.ProjectOverview" />
         </activity>
-        <activity
-            android:name="com.bpf.sharepoint.project.dates.SettingsActivity"
-            android:label="@string/action_settings"
-            android:parentActivityName="com.bpf.sharepoint.project.dates.ProjectOverview" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.bpf.sharepoint.project.dates.ProjectOverview" />
-        </activity>
+
     </application>
 
 </manifest>

@@ -46,8 +46,7 @@ public class ProjectOverview extends Activity {
                 startActivity(addProj);
                 return true;
             case R.id.action_settings:
-                Intent settingsAct=new Intent(this,SettingsActivity.class);
-                startActivity(settingsAct);
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
