@@ -3,10 +3,13 @@
     package="com.bpf.sharepoint.project.dates"
     android:versionCode="1"
     android:versionName="1.0" >
-    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="19" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -22,14 +25,29 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.bpf.sharepoint.project.dates.AddProject"
-            android:label="@string/add_project"
+            android:name="com.bpf.sharepoint.project.dates.SharePointAuth"
+            android:label="@string/sharepoint_auth"
             android:parentActivityName="com.bpf.sharepoint.project.dates.ProjectOverview" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.bpf.sharepoint.project.dates.ProjectOverview" />
         </activity>
-
+        <activity
+            android:name="com.bpf.sharepoint.project.dates.AddServer"
+            android:label="@string/title_activity_add_server"
+            android:parentActivityName="com.bpf.sharepoint.project.dates.ProjectOverview" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bpf.sharepoint.project.dates.ProjectOverview" />
+        </activity>
+        <activity
+            android:name=".SelectCalendar"
+            android:label="@string/title_activity_select_calender"
+            android:parentActivityName="com.bpf.sharepoint.project.dates.ProjectOverview" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.bpf.sharepoint.project.dates.ProjectOverview" />
+        </activity>
     </application>
 
 </manifest>

@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="action_settings">Einstellungen</string>
     <string name="app_name">SP Projekttermine</string>
     <string name="project_overview">Projektübersicht</string>
-    <string name="add_project">Projekt hinzufügen</string>
+    <string name="sharepoint_auth">Authentifizieren</string>
     <string name="welcome">Herzlich Willkommen! Fügen Sie ein Projekt hinzu (Button +) um mit der Benutzung zu starten.</string>
-    <string name="cal_address">https://bcwgruppe.sharepoint.com</string>
+    <string name="serverURL">https://bcwgruppe.sharepoint.com</string>
     <string name="username">Benutzername</string>
     <string name="password">Passwort</string>
     <string name="save">Speichern</string>
-    <string name="Login">Login</string>
+    <string name="login">Login</string>
+    <string name="title_activity_add_server">Server hinzufügen</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="test">Test</string>
+    <string name="title_activity_select_calender">Kalender auswählen</string>
+    <string name="refresh">Aktualisieren</string>
+
 </resources>
