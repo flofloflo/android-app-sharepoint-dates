@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.CookieManager;
 import android.webkit.WebViewClient;
-import android.widget.EditText;
 
 
 
@@ -40,12 +39,12 @@ public class SharePointAuth extends Activity {
         String server_url = intent.getStringExtra("SERVER_URL");
         //WebView Element ausfindig machen
         WebView wv = (WebView) findViewById(R.id.webView);
-        //Übergebene Login-Seite aufrufen (damit der Benutzer seine Anmeldedaten eingeben kann)
-        wv.loadUrl(server_url);
         //JavaScript aktivieren
         wv.getSettings().setJavaScriptEnabled(true);
         //Vorhandene Cookies löschen
         CookieManager.getInstance().removeSessionCookie();
+        //Übergebene Login-Seite aufrufen (damit der Benutzer seine Anmeldedaten eingeben kann)
+        wv.loadUrl(server_url);
         //WebViewClient UrlLoading überschreiben um Auth-Cookies abzugreifen
         wv.setWebViewClient(new WebViewClient(){
             @Override
@@ -56,37 +55,51 @@ public class SharePointAuth extends Activity {
                 CookieManager cookieManager = CookieManager.getInstance();
                 String Cookies = cookieManager.getCookie(url);
                 //Wenn "rtFa" im Cookie enthalten ist, Inhalt auslesen
-                if(Cookies.contains("rtFa"))
+
+               if(Cookies != null && Cookies.contains("rtFa"))
                 {
                     String[] seperated = Cookies.split(";");
                     boolean RTFA = false;
                     boolean FedAuth = false;
                     String RTFA_Value = "";
                     String FedAuth_Value = "";
+                    Intent it=new Intent();
+                    Bundle authData=new Bundle();
                     for(int i=0;i <= seperated.length - 1;i++)
                     {
                         if(seperated[i].contains("rtFa") && RTFA != true)
                         {
-                            //"rtFa" Wert als SharePreference abspeichern um auch nach Neustart der App darauf zugreifen zu können
-                            SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                            SharedPreferences.Editor editor = shared.edit();
                             RTFA_Value = seperated[i].trim().substring(5);
+                            authData.putString("rtFa",RTFA_Value);
+                            //"rtFa" Wert als SharePreference abspeichern um auch nach Neustart der App darauf zugreifen zu können
+                            /*SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            SharedPreferences.Editor editor = shared.edit();
+
                             editor.putString("rtFa", RTFA_Value);
-                            editor.commit();
+                            editor.commit();*/
                             RTFA =true;
                         }
                         if(seperated[i].contains("FedAuth") && FedAuth != true)
                         {
-                            //"FedAuth" Wert als SharePreference abspeichern um auch nach Neustart der App darauf zugreifen zu können
-                            SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                            SharedPreferences.Editor editor = shared.edit();
                             FedAuth_Value = seperated[i].trim().substring(8);
+                            authData.putString("FedAuth",FedAuth_Value);
+                            //"FedAuth" Wert als SharePreference abspeichern um auch nach Neustart der App darauf zugreifen zu können
+                            /*SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            SharedPreferences.Editor editor = shared.edit();
+
                             editor.putString("FedAuth", FedAuth_Value);
-                            editor.commit();
+                            editor.commit();*/
                             FedAuth =true;
                         }
                         if(RTFA == true && FedAuth == true)
                         {
+                            /*SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            SharedPreferences.Editor editor = shared.edit();
+                            editor.putString("URL", url);
+                            editor.commit();*/
+                            authData.putString("Url",url);
+                            it.putExtras(authData);
+                            setResult(RESULT_OK, it);
                             finish(); //Authentifizierung vollständig ==> Activity beenden
                         }}}
                 return true;

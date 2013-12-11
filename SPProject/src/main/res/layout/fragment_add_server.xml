@@ -9,17 +9,7 @@
     tools:context="com.bpf.sharepoint.project.dates.AddServer$PlaceholderFragment"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/txt_server_url"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/serverURL"
-        android:inputType="textUri" />
-    <Button
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/login"
-        android:onClick="doLogin"/>
+
     <Button
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

@@ -17,7 +17,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class AddServer extends Activity {
-
+    private String rtFa="Empty";
+    private String FedAuth="Empty";
+    private String spUrl="Empty";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +32,6 @@ public class AddServer extends Activity {
                     .commit();
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -52,25 +53,50 @@ public class AddServer extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void doLogin(View view) {
+    @Override
+    public void onPostCreate(Bundle savedInstanceState){
+        //Nach Laden der Activity mit Login bei SharePoint Online beginnen
+        super.onPostCreate(savedInstanceState);
         Intent int_sp_auth;
         int_sp_auth = new Intent(this,SharePointAuth.class);
-        EditText txt_server_url=(EditText) findViewById(R.id.txt_server_url);
-        String server_url = txt_server_url.getText().toString();
-        int_sp_auth.putExtra("SERVER_URL",server_url);
-        startActivity(int_sp_auth);
+        //Login-URL für alle bei Microsoft gehosteten (Office 365) SharePoint Seiten ist identisch??
+        //login.microsoftonline.com sieht identisch aus, leiett aber auf OWA weiter ohne cookie zu erzeugen
+        //TODO: Fiddler Test zu diesem Thema!!
+        int_sp_auth.putExtra("SERVER_URL","https://bcwgruppe.sharepoint.com");
+        //Activity SharePointAuth starten
+        startActivityForResult(int_sp_auth, 0);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK)
+        {
+            Bundle authData = data.getExtras();
+            rtFa=authData.getString("rtFa","No Value");
+            FedAuth=authData.getString("FedAuth","No Value");
+            spUrl=authData.getString("Url","No Value");
+            /*SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor editor = shared.edit();
+
+            editor.putString("rtFa", RTFA_Value);
+            editor.commit();*/
+        }
+    }
+
+
     public void selectCalendars(View view) {
         Intent int_select_calendars;
         int_select_calendars = new Intent(this,SelectCalendar.class);
         startActivity(int_select_calendars);
     }
     public void doTest(View view) {
-        SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        /*SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String url = shared.getString("URL", "No Value");
         String RTFA = shared.getString("rtFa", "No Value");
-        String FedAuth = shared.getString("FedAuth", "No Value");
+        String FedAuth = shared.getString("FedAuth", "No Value");*/
         TextView lbl_test_result=(TextView) findViewById(R.id.lbl_test_result);
-        lbl_test_result.setText("RTFA= "+RTFA+"\nFedAuth= "+FedAuth);
+        lbl_test_result.setText("URL:"+spUrl+"\n"+"RTFA= "+rtFa+"\nFedAuth= "+FedAuth);
     }
 
     /**

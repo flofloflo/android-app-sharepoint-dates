@@ -9,19 +9,41 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 public class SelectCalendar extends Activity {
+    // Initialize the array
+    String[] monthsArray = { "JAN", "FEB", "MAR", "APR", "MAY", "JUNE", "JULY",
+            "AUG", "SEPT", "OCT", "NOV", "DEC" };
+
+    // Declare the UI components
+    private ListView calendarsListView;
+    private ArrayAdapter arrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_calendar);
-
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+        // Initialize the UI components
+        calendarsListView = (ListView) findViewById(R.id.lst_calendars);
+        // For this moment, you have ListView where you can display a list.
+        // But how can we put this data set to the list?
+        // This is where you need an Adapter
+
+        // context - The current context.
+        // resource - The resource ID for a layout file containing a layout
+        // to use when instantiating views.
+        // From the third parameter, you plugged the data set to adapter
+        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, monthsArray);
+
+        // By using setAdapter method, you plugged the ListView with adapter
+        calendarsListView.setAdapter(arrayAdapter);
     }
 
 
@@ -52,8 +74,8 @@ public class SelectCalendar extends Activity {
     public void doRefresh(View view) {
 
 
-        TextView lbl_json=(TextView) findViewById(R.id.lbl_json);
-        lbl_json.setText(new getSharePointData(getApplicationContext()).execute("https://bcwgruppe.sharepoint.com/_api/Lists/?$filter=BaseTemplate%20eq%20106&$select=Id,Title").toString());
+        //TextView lbl_json=(TextView) findViewById(R.id.lbl_json);
+        //lbl_json.setText(new getSharePointData(getApplicationContext()).execute("https://bcwgruppe.sharepoint.com/_api/Lists/?$filter=BaseTemplate%20eq%20106&$select=Id,Title").toString());
     }
 
     /**
