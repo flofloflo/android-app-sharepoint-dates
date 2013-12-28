@@ -90,16 +90,13 @@ public class AddServer extends Activity {
                 editor.commit();
                 if(rtFa!="No Value" && FedAuth!="No Value")
                 {
-                    lbl_test_result.setText("Login erfolgreich...");
+                    lbl_test_result.setText(getString(R.string.login_successful));
                 }
                 else
                 {
-                    lbl_test_result.setText("Es gab ein Problem während des Anmeldevorgangs. Bitte versuchen Sie es erneut.");
+                    lbl_test_result.setText(getString(R.string.login_error));
                 }
-                /*SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                String url = shared.getString("URL", "No Value");
-                String RTFA = shared.getString("rtFa", "No Value");
-                String FedAuth = shared.getString("FedAuth", "No Value");*/
+
             }
             if(Activity=="SELECT_CAL")
             {

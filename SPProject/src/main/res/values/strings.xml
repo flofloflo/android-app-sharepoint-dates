@@ -18,5 +18,8 @@
     <string name="refresh">Aktualisieren</string>
     <string name="add_server_desc_text">Bitte geben Sie die Internetadresse der SharePoint-Webseite ein, von der Sie Projekttermine anzeigen wollen. (Bspw.: https://contoso.sharepoint.com)</string>
     <string name="wait_while_loading">Bitte warten, Daten werden geladen...</string>
+    <string name="login_successful">Login erfolgreich...</string>
+    <string name="login_error">Es gab ein Problem während des Loginvorgangs. Bitte versuchen Sie es erneut!</string>
+    <string name="parsing_data">Daten werden verarbeitet...</string>
 
 </resources>
