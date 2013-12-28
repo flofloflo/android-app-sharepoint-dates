@@ -39,6 +39,8 @@ public class SharePointAuth extends Activity {
         String server_url = intent.getStringExtra("SERVER_URL");
         //WebView Element ausfindig machen
         WebView wv = (WebView) findViewById(R.id.webView);
+        //User-Agent auf Desktop setzen um richtige Ansicht zu laden..
+        wv.getSettings().setUserAgentString("Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.4) Gecko/20100101 Firefox/4.0");
         //JavaScript aktivieren
         wv.getSettings().setJavaScriptEnabled(true);
         //Vorhandene Cookies löschen
@@ -98,6 +100,7 @@ public class SharePointAuth extends Activity {
                             editor.putString("URL", url);
                             editor.commit();*/
                             authData.putString("Url",url);
+                            authData.putString("Activity","SP_AUTH");
                             it.putExtras(authData);
                             setResult(RESULT_OK, it);
                             finish(); //Authentifizierung vollständig ==> Activity beenden

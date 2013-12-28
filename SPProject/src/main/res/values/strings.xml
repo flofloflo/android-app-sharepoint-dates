@@ -2,11 +2,11 @@
 <resources>
 
     <string name="action_settings">Einstellungen</string>
-    <string name="app_name">SP Projekttermine</string>
+    <string name="app_name">Projekt Termine</string>
     <string name="project_overview">Projektübersicht</string>
     <string name="sharepoint_auth">Authentifizieren</string>
     <string name="welcome">Herzlich Willkommen! Fügen Sie ein Projekt hinzu (Button +) um mit der Benutzung zu starten.</string>
-    <string name="serverURL">https://bcwgruppe.sharepoint.com</string>
+    <string name="serverURL">https://WEBSITE-NAME.sharepoint.com</string>
     <string name="username">Benutzername</string>
     <string name="password">Passwort</string>
     <string name="save">Speichern</string>
@@ -16,5 +16,7 @@
     <string name="test">Test</string>
     <string name="title_activity_select_calender">Kalender auswählen</string>
     <string name="refresh">Aktualisieren</string>
+    <string name="add_server_desc_text">Bitte geben Sie die Internetadresse der SharePoint-Webseite ein, von der Sie Projekttermine anzeigen wollen. (Bspw.: https://contoso.sharepoint.com)</string>
+    <string name="wait_while_loading">Bitte warten, Daten werden geladen...</string>
 
 </resources>

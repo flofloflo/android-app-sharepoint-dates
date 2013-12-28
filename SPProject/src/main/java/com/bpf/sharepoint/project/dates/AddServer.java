@@ -55,14 +55,15 @@ public class AddServer extends Activity {
 
     @Override
     public void onPostCreate(Bundle savedInstanceState){
-        //Nach Laden der Activity mit Login bei SharePoint Online beginnen
         super.onPostCreate(savedInstanceState);
+
+    }
+    public void doAuth(View view){
         Intent int_sp_auth;
         int_sp_auth = new Intent(this,SharePointAuth.class);
-        //Login-URL für alle bei Microsoft gehosteten (Office 365) SharePoint Seiten ist identisch??
-        //login.microsoftonline.com sieht identisch aus, leiett aber auf OWA weiter ohne cookie zu erzeugen
-        //TODO: Fiddler Test zu diesem Thema!!
-        int_sp_auth.putExtra("SERVER_URL","https://bcwgruppe.sharepoint.com");
+        EditText txtSpUrl = (EditText) findViewById(R.id.txtSpUrl);
+        String spUrl = txtSpUrl.getText().toString();
+        int_sp_auth.putExtra("SERVER_URL",spUrl);
         //Activity SharePointAuth starten
         startActivityForResult(int_sp_auth, 0);
     }
@@ -73,14 +74,37 @@ public class AddServer extends Activity {
         if(resultCode==RESULT_OK)
         {
             Bundle authData = data.getExtras();
-            rtFa=authData.getString("rtFa","No Value");
-            FedAuth=authData.getString("FedAuth","No Value");
-            spUrl=authData.getString("Url","No Value");
-            /*SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            SharedPreferences.Editor editor = shared.edit();
+            String Activity=authData.getString("Activity","unknown");
+            if(Activity.equals("SP_AUTH"))
+            {
+                rtFa=authData.getString("rtFa","No Value");
+                FedAuth=authData.getString("FedAuth","No Value");
+                spUrl=authData.getString("Url","No Value");
+                TextView lbl_test_result=(TextView) findViewById(R.id.lbl_test_result);
 
-            editor.putString("rtFa", RTFA_Value);
-            editor.commit();*/
+                SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = shared.edit();
+                editor.putString("rtFa", rtFa);
+                editor.putString("FedAuth", FedAuth);
+                editor.putString("spUrl", spUrl);
+                editor.commit();
+                if(rtFa!="No Value" && FedAuth!="No Value")
+                {
+                    lbl_test_result.setText("Login erfolgreich...");
+                }
+                else
+                {
+                    lbl_test_result.setText("Es gab ein Problem während des Anmeldevorgangs. Bitte versuchen Sie es erneut.");
+                }
+                /*SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                String url = shared.getString("URL", "No Value");
+                String RTFA = shared.getString("rtFa", "No Value");
+                String FedAuth = shared.getString("FedAuth", "No Value");*/
+            }
+            if(Activity=="SELECT_CAL")
+            {
+                //Do something..
+            }
         }
     }
 
@@ -88,16 +112,12 @@ public class AddServer extends Activity {
     public void selectCalendars(View view) {
         Intent int_select_calendars;
         int_select_calendars = new Intent(this,SelectCalendar.class);
-        startActivity(int_select_calendars);
+        int_select_calendars.putExtra("spUrl",spUrl);
+        int_select_calendars.putExtra("rtFa",rtFa);
+        int_select_calendars.putExtra("FedAuth",FedAuth);
+        startActivityForResult(int_select_calendars, 0);
     }
-    public void doTest(View view) {
-        /*SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String url = shared.getString("URL", "No Value");
-        String RTFA = shared.getString("rtFa", "No Value");
-        String FedAuth = shared.getString("FedAuth", "No Value");*/
-        TextView lbl_test_result=(TextView) findViewById(R.id.lbl_test_result);
-        lbl_test_result.setText("URL:"+spUrl+"\n"+"RTFA= "+rtFa+"\nFedAuth= "+FedAuth);
-    }
+
 
     /**
      * A placeholder fragment containing a simple view.

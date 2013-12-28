@@ -8,9 +8,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+
 
 public class SelectCalendar extends Activity {
     // Initialize the array
@@ -30,6 +33,13 @@ public class SelectCalendar extends Activity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+
+
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
         // Initialize the UI components
         calendarsListView = (ListView) findViewById(R.id.lst_calendars);
         // For this moment, you have ListView where you can display a list.
@@ -45,7 +55,6 @@ public class SelectCalendar extends Activity {
         // By using setAdapter method, you plugged the ListView with adapter
         calendarsListView.setAdapter(arrayAdapter);
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -63,7 +72,7 @@ public class SelectCalendar extends Activity {
 
         switch (item.getItemId()) {
             case R.id.action_refresh:
-
+                    doRefresh();
                 return true;
 
         }
@@ -71,11 +80,15 @@ public class SelectCalendar extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void doRefresh(View view) {
+    public void doRefresh() {
 
 
-        //TextView lbl_json=(TextView) findViewById(R.id.lbl_json);
-        //lbl_json.setText(new getSharePointData(getApplicationContext()).execute("https://bcwgruppe.sharepoint.com/_api/Lists/?$filter=BaseTemplate%20eq%20106&$select=Id,Title").toString());
+
+
+        GetSharePointData spdata =new GetSharePointData(this,(TextView) findViewById(R.id.lbl_json));
+        spdata.execute("https://bcwgruppe.sharepoint.com/_api/Lists/?$filter=BaseTemplate%20eq%20106&$select=Id,Title");
+
+
     }
 
     /**
