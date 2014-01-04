@@ -1,6 +1,7 @@
 package com.bpf.sharepoint.project.dates;
 
 import android.app.Activity;
+import android.app.Application;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,11 +16,14 @@ import android.webkit.WebView;
 import android.webkit.CookieManager;
 import android.webkit.WebViewClient;
 
+import java.net.URISyntaxException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class SharePointAuth extends Activity {
 
-
+    protected SharedPreferences shared;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,12 +38,14 @@ public class SharePointAuth extends Activity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         //Aus aufrufender Activity übergebene SERVER_URL extrahieren
-        Intent intent = getIntent();
-        String server_url = intent.getStringExtra("SERVER_URL");
+        //Intent intent = getIntent();
+        String server_url = shared.getString("spUrl","https://login.microsoftonline.com");
         //WebView Element ausfindig machen
         WebView wv = (WebView) findViewById(R.id.webView);
         //User-Agent auf Desktop setzen um richtige Ansicht zu laden..
+        //(Nur wichtig wenn User die falsche URL angibt und manuell zu Sharepoint Seite navigiert)
         wv.getSettings().setUserAgentString("Mozilla/5.0 (X11; U; Linux i686; en-US; rv:1.9.0.4) Gecko/20100101 Firefox/4.0");
         //JavaScript aktivieren
         wv.getSettings().setJavaScriptEnabled(true);
@@ -66,42 +72,39 @@ public class SharePointAuth extends Activity {
                     String RTFA_Value = "";
                     String FedAuth_Value = "";
                     Intent it=new Intent();
-                    Bundle authData=new Bundle();
+                    //Bundle authData=new Bundle();
                     for(int i=0;i <= seperated.length - 1;i++)
                     {
                         if(seperated[i].contains("rtFa") && RTFA != true)
                         {
                             RTFA_Value = seperated[i].trim().substring(5);
-                            authData.putString("rtFa",RTFA_Value);
-                            //"rtFa" Wert als SharePreference abspeichern um auch nach Neustart der App darauf zugreifen zu können
-                            /*SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                            SharedPreferences.Editor editor = shared.edit();
-
-                            editor.putString("rtFa", RTFA_Value);
-                            editor.commit();*/
+                            //authData.putString("rtFa",RTFA_Value);
                             RTFA =true;
                         }
                         if(seperated[i].contains("FedAuth") && FedAuth != true)
                         {
                             FedAuth_Value = seperated[i].trim().substring(8);
-                            authData.putString("FedAuth",FedAuth_Value);
-                            //"FedAuth" Wert als SharePreference abspeichern um auch nach Neustart der App darauf zugreifen zu können
-                            /*SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                            SharedPreferences.Editor editor = shared.edit();
-
-                            editor.putString("FedAuth", FedAuth_Value);
-                            editor.commit();*/
+                            //authData.putString("FedAuth",FedAuth_Value);
                             FedAuth =true;
                         }
                         if(RTFA == true && FedAuth == true)
                         {
-                            /*SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                            //Hauptpart der SharePoint Adresse herausfiltern
+                            Pattern p = Pattern.compile("https://[a-zA-Z0-9]*?\\.sharepoint\\.com/");
+                            Matcher m = p.matcher(url);
+                            if(m.find())
+                                url= m.group(0);
+                            else
+                                return false;
+                            //authData.putString("Url",url);
+                            //authData.putString("Activity","SP_AUTH");
+
                             SharedPreferences.Editor editor = shared.edit();
-                            editor.putString("URL", url);
-                            editor.commit();*/
-                            authData.putString("Url",url);
-                            authData.putString("Activity","SP_AUTH");
-                            it.putExtras(authData);
+                            editor.putString("rtFa", RTFA_Value);
+                            editor.putString("FedAuth", FedAuth_Value);
+                            editor.putString("spUrl", url);
+                            editor.commit();
+                            //it.putExtras(authData);
                             setResult(RESULT_OK, it);
                             finish(); //Authentifizierung vollständig ==> Activity beenden
                         }}}

@@ -5,7 +5,7 @@
     <string name="app_name">Projekt Termine</string>
     <string name="project_overview">Projektübersicht</string>
     <string name="sharepoint_auth">Authentifizieren</string>
-    <string name="welcome">Herzlich Willkommen! Fügen Sie ein Projekt hinzu (Button +) um mit der Benutzung zu starten.</string>
+    <string name="welcome">Herzlich Willkommen! Fügen Sie einen Server über die Einstellungen hinzu um Termine anzuzeigen.</string>
     <string name="serverURL">https://WEBSITE-NAME.sharepoint.com</string>
     <string name="username">Benutzername</string>
     <string name="password">Passwort</string>
@@ -21,5 +21,9 @@
     <string name="login_successful">Login erfolgreich...</string>
     <string name="login_error">Es gab ein Problem während des Loginvorgangs. Bitte versuchen Sie es erneut!</string>
     <string name="parsing_data">Daten werden verarbeitet...</string>
+    <string name="logout">Logout</string>
+    <string name="url_not_found">Die URL konnte nicht gefunden werden!</string>
+    <string name="bad_response">Die Serverantwort war fehlerhaft!</string>
+    <string name="please_relogin">Sitzung ungültig! Bitte melden Sie sich erneut an!</string>
 
 </resources>

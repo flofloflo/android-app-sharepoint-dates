@@ -33,7 +33,7 @@
                 android:value="com.bpf.sharepoint.project.dates.ProjectOverview" />
         </activity>
         <activity
-            android:name="com.bpf.sharepoint.project.dates.AddServer"
+            android:name=".ServerSettings"
             android:label="@string/title_activity_add_server"
             android:parentActivityName="com.bpf.sharepoint.project.dates.ProjectOverview" >
             <meta-data

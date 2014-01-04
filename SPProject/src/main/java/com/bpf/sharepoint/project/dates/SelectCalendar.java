@@ -2,17 +2,19 @@ package com.bpf.sharepoint.project.dates;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.ListView;
-
+import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class SelectCalendar extends Activity {
@@ -39,19 +41,26 @@ public class SelectCalendar extends Activity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Initialize the UI components
-        //calendarsListView = (ListView) findViewById(R.id.lst_calendars);
-        // For this moment, you have ListView where you can display a list.
-        // But how can we put this data set to the list?
-        // This is where you need an Adapter
+        ListView calList = (ListView) findViewById(R.id.lst_calendars);
 
-        // context - The current context.
-        // resource - The resource ID for a layout file containing a layout
-        // to use when instantiating views.
-        // From the third parameter, you plugged the data set to adapter
-        //arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, monthsArray);
-
-        // By using setAdapter method, you plugged the ListView with adapter
-        //calendarsListView.setAdapter(arrayAdapter);
+        // React to user clicks on item
+        calList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parentAdapter, View view, int position, long id) {
+                // We know the View is a TextView so we can cast it
+                TextView clickedView = (TextView) view;
+                ListView calIdList = (ListView) findViewById(R.id.lst_calID);
+                SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                SharedPreferences.Editor editor = shared.edit();
+                editor.putString("CalGUID", calIdList.getItemAtPosition(position).toString());
+                editor.commit();
+                Toast.makeText(SelectCalendar.this, "Kalender wurde gewählt: " + clickedView.getText() + "", Toast.LENGTH_SHORT).show();
+                //SelectCalendar.this.finish();
+                Intent int_main=new Intent(SelectCalendar.this,ProjectOverview.class);
+                startActivity(int_main);
+            }
+        });
+        //Liste aktualiseren
+        doRefresh();
     }
 
     @Override
@@ -79,15 +88,14 @@ public class SelectCalendar extends Activity {
     }
 
     public void doRefresh() {
-
-
-
-
-        GetSharePointData spdata =new GetSharePointData(this,(ListView) findViewById(R.id.lst_calendars));
-        spdata.execute("https://bcwgruppe.sharepoint.com/_api/Lists/?$filter=BaseTemplate%20eq%20106&$select=Id,Title");
-
-
+        SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(this);
+        SharePointGetCalendarList spdata =new SharePointGetCalendarList(this,(ListView) findViewById(R.id.lst_calendars),(ListView) findViewById(R.id.lst_calID));
+        spdata.execute(shared.getString("spUrl", getString(R.string.serverURL))+"_api/Lists/?$filter=BaseTemplate%20eq%20106&$select=Id,Title");
     }
+
+
+
+
 
     /**
      * A placeholder fragment containing a simple view.

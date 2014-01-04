@@ -1,7 +1,6 @@
 package com.bpf.sharepoint.project.dates;
 
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,18 +11,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
 import android.widget.EditText;
 import android.widget.TextView;
 
-public class AddServer extends Activity {
-    private String rtFa="Empty";
-    private String FedAuth="Empty";
-    private String spUrl="Empty";
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.IOException;
+import java.net.URI;
+
+public class ServerSettings extends Activity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_server);
+        setContentView(R.layout.activity_server_settings);
         //Up-Button aktivieren
         getActionBar().setDisplayHomeAsUpEnabled(true);
         if (savedInstanceState == null) {
@@ -31,13 +33,14 @@ public class AddServer extends Activity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.add_server, menu);
+        getMenuInflater().inflate(R.menu.server_settings, menu);
         return true;
     }
 
@@ -56,6 +59,9 @@ public class AddServer extends Activity {
     @Override
     public void onPostCreate(Bundle savedInstanceState){
         super.onPostCreate(savedInstanceState);
+        SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(this);
+        EditText txtSpUrl = (EditText) findViewById(R.id.txtSpUrl);
+        txtSpUrl.setText(shared.getString("spUrl", getString(R.string.serverURL)));
 
     }
     public void doAuth(View view){
@@ -63,31 +69,27 @@ public class AddServer extends Activity {
         int_sp_auth = new Intent(this,SharePointAuth.class);
         EditText txtSpUrl = (EditText) findViewById(R.id.txtSpUrl);
         String spUrl = txtSpUrl.getText().toString();
-        int_sp_auth.putExtra("SERVER_URL",spUrl);
-        //Activity SharePointAuth starten
+        SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor editor = shared.edit();
+        editor.putString("spUrl", spUrl);
+        editor.commit();
         startActivityForResult(int_sp_auth, 0);
     }
 
+    public void doLogout(View view){
+        SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(this);
+        SharePointLogout spLogout =new SharePointLogout(this);
+        spLogout.execute(shared.getString("spUrl", getString(R.string.serverURL)));
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==RESULT_OK)
         {
-            Bundle authData = data.getExtras();
-            String Activity=authData.getString("Activity","unknown");
-            if(Activity.equals("SP_AUTH"))
-            {
-                rtFa=authData.getString("rtFa","No Value");
-                FedAuth=authData.getString("FedAuth","No Value");
-                spUrl=authData.getString("Url","No Value");
-                TextView lbl_test_result=(TextView) findViewById(R.id.lbl_test_result);
-
+            TextView lbl_test_result=(TextView) findViewById(R.id.lbl_test_result);
                 SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                SharedPreferences.Editor editor = shared.edit();
-                editor.putString("rtFa", rtFa);
-                editor.putString("FedAuth", FedAuth);
-                editor.putString("spUrl", spUrl);
-                editor.commit();
+                String rtFa = shared.getString("rtFa","No Value");
+                String FedAuth = shared.getString("FedAuth","No Value");
                 if(rtFa!="No Value" && FedAuth!="No Value")
                 {
                     lbl_test_result.setText(getString(R.string.login_successful));
@@ -96,12 +98,6 @@ public class AddServer extends Activity {
                 {
                     lbl_test_result.setText(getString(R.string.login_error));
                 }
-
-            }
-            if(Activity=="SELECT_CAL")
-            {
-                //Do something..
-            }
         }
     }
 
@@ -109,9 +105,10 @@ public class AddServer extends Activity {
     public void selectCalendars(View view) {
         Intent int_select_calendars;
         int_select_calendars = new Intent(this,SelectCalendar.class);
-        int_select_calendars.putExtra("spUrl",spUrl);
-        int_select_calendars.putExtra("rtFa",rtFa);
-        int_select_calendars.putExtra("FedAuth",FedAuth);
+        SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(this);
+        int_select_calendars.putExtra("spUrl",shared.getString("spUrl", getString(R.string.serverURL)));
+        int_select_calendars.putExtra("rtFa",shared.getString("rtFa", "Empty"));
+        int_select_calendars.putExtra("FedAuth",shared.getString("FedAuth", "Empty"));
         startActivityForResult(int_select_calendars, 0);
     }
 
@@ -127,7 +124,7 @@ public class AddServer extends Activity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_add_server, container, false);
+            View rootView = inflater.inflate(R.layout.fragmen_server_settings, container, false);
             return rootView;
         }
     }
