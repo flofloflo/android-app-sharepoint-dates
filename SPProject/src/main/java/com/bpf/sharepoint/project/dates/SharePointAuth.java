@@ -1,7 +1,6 @@
 package com.bpf.sharepoint.project.dates;
 
 import android.app.Activity;
-import android.app.Application;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,8 +14,6 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.CookieManager;
 import android.webkit.WebViewClient;
-
-import java.net.URISyntaxException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,9 +35,10 @@ public class SharePointAuth extends Activity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+        //SharePoint URL aus SharedPreferences laden
         shared = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        //Aus aufrufender Activity übergebene SERVER_URL extrahieren
-        //Intent intent = getIntent();
+        //Wenn keine URL gespeichert ist auf Microsoft Seite springen
+        //(hier ist dann nachträglich ein manuelles aufrufen der SharePoint Seite durch den User notwendig)
         String server_url = shared.getString("spUrl","https://login.microsoftonline.com");
         //WebView Element ausfindig machen
         WebView wv = (WebView) findViewById(R.id.webView);
@@ -63,48 +61,43 @@ public class SharePointAuth extends Activity {
                 CookieManager cookieManager = CookieManager.getInstance();
                 String Cookies = cookieManager.getCookie(url);
                 //Wenn "rtFa" im Cookie enthalten ist, Inhalt auslesen
-
                if(Cookies != null && Cookies.contains("rtFa"))
                 {
+                    //Cookie String aufsplitten
                     String[] seperated = Cookies.split(";");
                     boolean RTFA = false;
                     boolean FedAuth = false;
                     String RTFA_Value = "";
                     String FedAuth_Value = "";
                     Intent it=new Intent();
-                    //Bundle authData=new Bundle();
+                    //Cookie Inhalt überprüfen
                     for(int i=0;i <= seperated.length - 1;i++)
                     {
                         if(seperated[i].contains("rtFa") && RTFA != true)
                         {
                             RTFA_Value = seperated[i].trim().substring(5);
-                            //authData.putString("rtFa",RTFA_Value);
                             RTFA =true;
                         }
                         if(seperated[i].contains("FedAuth") && FedAuth != true)
                         {
                             FedAuth_Value = seperated[i].trim().substring(8);
-                            //authData.putString("FedAuth",FedAuth_Value);
                             FedAuth =true;
                         }
                         if(RTFA == true && FedAuth == true)
                         {
-                            //Hauptpart der SharePoint Adresse herausfiltern
+                            //Hauptpart der SharePoint URL herausfiltern
                             Pattern p = Pattern.compile("https://[a-zA-Z0-9]*?\\.sharepoint\\.com/");
                             Matcher m = p.matcher(url);
                             if(m.find())
                                 url= m.group(0);
                             else
                                 return false;
-                            //authData.putString("Url",url);
-                            //authData.putString("Activity","SP_AUTH");
-
+                            //Ermittelte Werte in den SharedPreferences speichern
                             SharedPreferences.Editor editor = shared.edit();
                             editor.putString("rtFa", RTFA_Value);
                             editor.putString("FedAuth", FedAuth_Value);
                             editor.putString("spUrl", url);
                             editor.commit();
-                            //it.putExtras(authData);
                             setResult(RESULT_OK, it);
                             finish(); //Authentifizierung vollständig ==> Activity beenden
                         }}}
