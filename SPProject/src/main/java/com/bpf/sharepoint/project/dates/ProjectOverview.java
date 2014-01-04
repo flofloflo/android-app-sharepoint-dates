@@ -15,7 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class ProjectOverview extends Activity {
-
+    protected SharedPreferences shared;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,23 +31,8 @@ public class ProjectOverview extends Activity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        SharedPreferences shared = PreferenceManager.getDefaultSharedPreferences(this);
-        TextView txtNoCal = (TextView) findViewById(R.id.txtNoCalendarHint);
-        ListView lstCalEntries=(ListView) findViewById(R.id.lst_cal_entries);
-        if(shared.getString("CalGUID","None").equals("None"))
-        {
-            //Kein Kalender ausgewählt
-            txtNoCal.setVisibility(View.VISIBLE);
-            lstCalEntries.setVisibility(View.GONE);
-        }
-        else
-        {
-            //Kalendereinträge auflisten
-            lstCalEntries.setVisibility(View.VISIBLE);
-            txtNoCal.setVisibility(View.GONE);
-            SharePointGetCalendarEntries spdata =new SharePointGetCalendarEntries(this,lstCalEntries);
-            spdata.execute(shared.getString("CalGUID", "0"));
-        }
+        shared = PreferenceManager.getDefaultSharedPreferences(this);
+        doRefresh();
     }
 
     @Override
@@ -68,8 +53,30 @@ public class ProjectOverview extends Activity {
                 Intent int_server_settings=new Intent(this,ServerSettings.class);
                 startActivity(int_server_settings);
                 return true;
+            case R.id.action_refresh:
+                doRefresh();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void doRefresh() {
+        TextView txtNoCal = (TextView) findViewById(R.id.txtNoCalendarHint);
+        ListView lstCalEntries=(ListView) findViewById(R.id.lst_cal_entries);
+        if(shared.getString("CalGUID","None").equals("None"))
+        {
+            //Kein Kalender ausgewählt
+            txtNoCal.setVisibility(View.VISIBLE);
+            lstCalEntries.setVisibility(View.GONE);
+        }
+        else
+        {
+            //Kalendereinträge auflisten
+            lstCalEntries.setVisibility(View.VISIBLE);
+            txtNoCal.setVisibility(View.GONE);
+            SharePointGetCalendarEntries spdata =new SharePointGetCalendarEntries(this,lstCalEntries);
+            spdata.execute(shared.getString("CalGUID", "0"));
+        }
     }
 
     /**
