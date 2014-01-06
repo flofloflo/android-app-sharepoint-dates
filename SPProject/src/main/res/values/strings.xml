@@ -5,7 +5,7 @@
     <string name="app_name">Projekt Termine</string>
     <string name="project_overview">Projektübersicht</string>
     <string name="sharepoint_auth">Authentifizieren</string>
-    <string name="welcome">Herzlich Willkommen! Fügen Sie einen Server über die Einstellungen hinzu um Termine anzuzeigen.</string>
+    <string name="welcome">Herzlich Willkommen! Fügen Sie einen Server über die Einstellungen hinzu, um Termine anzuzeigen.</string>
     <string name="serverURL">https://WEBSITE-NAME.sharepoint.com</string>
     <string name="username">Benutzername</string>
     <string name="password">Passwort</string>
